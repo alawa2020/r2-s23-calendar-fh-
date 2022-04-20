@@ -1,5 +1,9 @@
 import { FormEvent } from 'react';
+
+import { useDispatch } from 'react-redux';
+
 import { useForm } from '../../hooks';
+import { startSignIn } from '../../state/actions';
 
 
 const initialLogin = {
@@ -23,9 +27,13 @@ export const AuthScreen = () => {
   const {formValues: registerFormValues, handleInputChange: registerHandleInputChange } = useForm( initialRegister );
   const { rName, rEmail, rPassword1, rPassword2 } = registerFormValues;
 
+  const dispatch = useDispatch();
+
   // functions
   const handleLoginSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // TODO: react 18 : any
+    dispatch( startSignIn( lEmail, lPassword ) as any);
   }
   const handleRegisterSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
