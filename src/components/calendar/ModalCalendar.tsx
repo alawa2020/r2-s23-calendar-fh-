@@ -8,7 +8,7 @@ import { customStyles } from "../../utils";
 
 import "./modalCalendar.css";
 import { Event } from "../../interfaces";
-import { useForm } from "../../hooks/useForm";
+import { useForm } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../state/reducers";
 import { doAddNewEvent, doCleanActiveEvent, doCloseModal, doUpdateEvent } from "../../state/actions";
