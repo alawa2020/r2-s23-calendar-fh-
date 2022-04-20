@@ -17,7 +17,7 @@ const initialState: EventsState = {
       _id: Date.now().toString(),
       notes: 'no me rendire! por mis amigos!',
       user: {
-        uid: Date.now().toString(),
+        uid: (Date.now()+1).toString(),
         name: 'Fernando',
       }
     }
@@ -33,6 +33,18 @@ export const eventsReducer = ( state: EventsState = initialState, action: Events
       return {
         ...state,
         events: [ ...state.events, {...action.payload}]
+      }
+
+    case '[events] - Activate event':
+      return {
+        ...state,
+        activeEvent: { ...action.payload }
+      }
+    
+    case '[events] - Clean active event':
+      return {
+        ...state,
+        activeEvent: null,
       }
   
     default:

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
-import { Calendar, momentLocalizer, View } from 'react-big-calendar'
+import { Calendar, momentLocalizer, SlotInfo, View } from 'react-big-calendar'
 import moment from 'moment'
 
-import { AddNewFab, Navbar } from '../ui'
+import { AddNewFab, DeleteEventFab, Navbar } from '../ui'
 import { Event } from '../../interfaces';
 import { messages } from '../../utils';
 import { ModalCalendar, CalendarEvent } from './';
 import { useDispatch, useSelector } from 'react-redux';
-import { doOpenModal } from '../../state/actions';
+import { doActivateEvent, doCleanActiveEvent, doOpenModal } from '../../state/actions';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
@@ -23,7 +23,7 @@ export const CalendarScreen = () => {
   // hooks
   const [lastView, setLastView] = useState(localStorage.getItem('lastView-r2') || 'month');
 
-  const { events } = useSelector( (state: State) => state.events );
+  const { events, activeEvent } = useSelector( (state: State) => state.events );
   const dispatch = useDispatch();
 
   // functions
@@ -44,12 +44,16 @@ export const CalendarScreen = () => {
   }
 
   const onSelectEvent = ( event: Event ) => {
-    console.log('select', event.title);
+    dispatch( doActivateEvent( event ));
   }
 
   const onDoubleClickEvent = ( event: Event ) => {
     console.log('doubleClick', event.title);
     dispatch( doOpenModal() );
+  }
+
+  const onSelectSlot = (slotInfo: SlotInfo) => {
+    dispatch( doCleanActiveEvent() )
   }
 
 
@@ -72,9 +76,15 @@ export const CalendarScreen = () => {
           event: CalendarEvent
         }
         }
+        onSelectSlot={ onSelectSlot }
+        selectable
       />
 
       <AddNewFab />
+
+      {
+        activeEvent && <DeleteEventFab />
+      }
 
       <ModalCalendar />
 
