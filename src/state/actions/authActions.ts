@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { LoginResponse, RevalidateTokenResponse } from '../../interfaces/responses';
+import { LoginResponse, RegisterUserResponse, RevalidateTokenResponse } from '../../interfaces/responses';
 import { fetchWithoutToken, fetchWithToken } from '../../utils/fetch';
 /* TYPES */
 export type AuthActionType =
@@ -56,6 +56,27 @@ export const startCheckAuth = () => {
       }
     } catch (err) {
       
+    }
+  }
+}
+
+export const startRegisterUser = ( name: string, email: string, password: string) => {
+  return async( dispatch: Dispatch ) => {
+    try {
+
+      const resp = await fetchWithoutToken( '/auth/new', {name, email, password }, 'POST' );
+      const body: RegisterUserResponse = await resp.json();
+
+      if( body.ok ) {
+        localStorage.setItem('calendar-token-r2', body.token );
+        dispatch( doSignIn( body.uid, body.name ));
+      } else {
+        alert( body.msg );
+      }
+
+    } catch (err) {
+      console.log(err)
+      alert('something went wrong')
     }
   }
 }

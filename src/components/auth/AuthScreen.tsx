@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 
 import { useForm } from '../../hooks';
-import { startSignIn } from '../../state/actions';
+import { startRegisterUser, startSignIn } from '../../state/actions';
 
 
 const initialLogin = {
@@ -33,11 +33,16 @@ export const AuthScreen = () => {
   // functions
   const handleLoginSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: react 18 : any
+    // TODO: react 18 all dispatchs : any
     dispatch( startSignIn( lEmail, lPassword ) as any);
   }
   const handleRegisterSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if( rPassword1 !== rPassword2 ) {
+      alert('passwords are not equals!')
+      return;
+    }
+    dispatch( startRegisterUser( rName, rEmail, rPassword1 ) as any);
   }
 
   return (
