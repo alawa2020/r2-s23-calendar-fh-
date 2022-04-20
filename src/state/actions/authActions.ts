@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
-import { LoginResponse } from '../../interfaces/responses';
-import { fetchWithoutToken } from '../../utils/fetch';
+import { LoginResponse, RevalidateTokenResponse } from '../../interfaces/responses';
+import { fetchWithoutToken, fetchWithToken } from '../../utils/fetch';
 /* TYPES */
 export type AuthActionType =
   |{ type: '[auth] - Sign in'; payload: { uid: string, name: string, }}
@@ -39,6 +39,23 @@ export const startSignIn = ( email: string, password: string ) => {
     } catch (err) {
       console.log(err)
       alert('something went wrong!');
+    }
+  }
+}
+
+export const startCheckAuth = () => {
+  return async( dispatch: Dispatch ) => {
+    try {
+      const resp = await fetchWithToken( '/auth/renew');
+      const body = await resp.json() as RevalidateTokenResponse;
+      if( body.ok ) {
+        localStorage.setItem('calendar-token-r2', body.token );
+        dispatch( doSignIn( body.uid, body.name ));
+      } else {
+        dispatch( doSetAuthCheck() );
+      }
+    } catch (err) {
+      
     }
   }
 }
