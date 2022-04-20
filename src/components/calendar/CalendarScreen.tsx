@@ -8,7 +8,8 @@ import { Navbar } from '../ui'
 import { Event } from '../../interfaces';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-
+import 'moment/locale/es';
+import { messages } from '../../utils';
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
@@ -30,6 +31,27 @@ export const CalendarScreen = () => {
     setLastView( e );
     localStorage.setItem('lastView-r2', e );
   }
+
+  const eventPropGetter = ( event: Event, start: Date, end: Date, isSelected: boolean ) => {
+    const style = {
+      backgroundColor: '#367cf7',
+      borderRadius: '0px',
+      opacity: 0.8,
+      display: 'block',
+      color: 'white',
+    }
+    return { style }
+  }
+
+  const onSelectEvent = ( event: Event ) => {
+    console.log('select', event.title);
+  }
+
+  const onDoubleClickEvent = ( event: Event ) => {
+    console.log('doubleClick', event.title);
+  }
+
+
   return (
     <div className="calendar-screen">
       <Navbar />
@@ -41,6 +63,10 @@ export const CalendarScreen = () => {
         endAccessor="end"
         view={ lastView as View }
         onView={ onView }
+        eventPropGetter={ eventPropGetter }
+        onSelectEvent={ onSelectEvent }
+        onDoubleClickEvent={ onDoubleClickEvent }
+        messages={ messages }
       />
 
     </div>
