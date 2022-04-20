@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 
 import Modal from "react-modal";
 import DateTimePicker from 'react-datetime-picker';
@@ -11,7 +11,7 @@ import { Event } from "../../interfaces";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../state/reducers";
-import { doCloseModal } from "../../state/actions";
+import { doAddNewEvent, doCloseModal } from "../../state/actions";
 
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
@@ -32,13 +32,17 @@ const initialForm: Event = {
 export const ModalCalendar = () => {
   // hooks
   const { formValues, setFormValues, handleInputChange } = useForm( initialForm );
-  const { title, notes, start, end } = formValues;
+  const { _id, title, notes, start, end } = formValues;
+  const [isValidTitle, setIsValidTitle] = useState(true);
 
   const { isModalOpen } = useSelector( (state: State) => state.ui );
   const dispatch = useDispatch();
+
   // functions
   const closeModal = () => {
     dispatch( doCloseModal() );
+    setFormValues( initialForm );
+
   };
 
   const handleStartDateChange = ( e: Date ) => {
@@ -56,7 +60,25 @@ export const ModalCalendar = () => {
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log( formValues );
+    if( title.trim().length < 2 ) {
+      setIsValidTitle( false );
+      return;
+    }
+    if( !_id ) {
+      const eventToAdd: Event = {
+        ...formValues,
+        _id: Date.now().toString(),
+        user: {
+          uid: (Date.now()+1).toString(),
+          name: 'Fernando',
+        }
+      }
+      dispatch( doAddNewEvent( eventToAdd ));
+    } else {
+      alert('event updated')
+    }
+    setIsValidTitle( true );
+    closeModal();
   }
 
   return (
@@ -106,7 +128,7 @@ export const ModalCalendar = () => {
             <label>Titulo y notas</label>
             <input
               type="text"
-              className="form-control"
+              className={ `form-control ${!isValidTitle && 'is-invalid' }`}
               placeholder="Título del evento"
               autoComplete="off"
               name="title"

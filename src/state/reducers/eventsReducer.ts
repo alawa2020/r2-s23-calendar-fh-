@@ -28,6 +28,12 @@ const initialState: EventsState = {
 
 export const eventsReducer = ( state: EventsState = initialState, action: EventsActionType): EventsState => {
   switch ( action.type ) {
+
+    case '[events] - Add new event':
+      return {
+        ...state,
+        events: [ ...state.events, {...action.payload}]
+      }
   
     default:
       return state;
