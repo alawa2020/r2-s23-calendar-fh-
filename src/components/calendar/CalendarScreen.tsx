@@ -10,6 +10,7 @@ import { Event } from '../../interfaces';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
 import { messages } from '../../utils';
+import { ModalCalendar } from './';
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
@@ -19,7 +20,7 @@ const events: Event[] = [
     start: moment().toDate(),
     end: moment().add(1, 'hours').toDate(),
     _id: Date.now().toString(),
-    description: 'no me rendire! por mis amigos!',
+    notes: 'no me rendire! por mis amigos!',
   }
 ]
 export const CalendarScreen = () => {
@@ -68,6 +69,8 @@ export const CalendarScreen = () => {
         onDoubleClickEvent={ onDoubleClickEvent }
         messages={ messages }
       />
+
+      <ModalCalendar />
 
     </div>
   )
