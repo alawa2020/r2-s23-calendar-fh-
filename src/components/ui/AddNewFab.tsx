@@ -1,12 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { doOpenModal } from '../../state/actions';
+import { doCleanActiveEvent, doOpenModal } from '../../state/actions';
 
 export const AddNewFab = () => {
 
   const dispatch = useDispatch();
 
   const handleAddButtonClick = () => {
+    dispatch( doCleanActiveEvent() ); 
     dispatch( doOpenModal() );
   }
   return (

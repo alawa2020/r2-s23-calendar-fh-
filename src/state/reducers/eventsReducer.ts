@@ -28,6 +28,18 @@ const initialState: EventsState = {
 
 export const eventsReducer = ( state: EventsState = initialState, action: EventsActionType): EventsState => {
   switch ( action.type ) {
+    
+    case '[events] - Activate event':
+      return {
+        ...state,
+        activeEvent: { ...action.payload }
+      }
+    
+    case '[events] - Clean active event':
+      return {
+        ...state,
+        activeEvent: null,
+      }
 
     case '[events] - Add new event':
       return {
@@ -43,17 +55,12 @@ export const eventsReducer = ( state: EventsState = initialState, action: Events
         ))
       }
 
-    case '[events] - Activate event':
+    case '[events] - Delete event':
       return {
         ...state,
-        activeEvent: { ...action.payload }
+        events: state.events.filter( event => event._id !== action.payload.id ),
       }
-    
-    case '[events] - Clean active event':
-      return {
-        ...state,
-        activeEvent: null,
-      }
+
   
     default:
       return state;

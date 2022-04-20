@@ -41,7 +41,9 @@ export const ModalCalendar = () => {
 
   useEffect(() => {
     if( activeEvent ) {
-      setFormValues( activeEvent )
+      setFormValues( activeEvent );
+    } else {
+      setFormValues( initialForm );
     }
   }, [ activeEvent, setFormValues ])
 
@@ -49,7 +51,6 @@ export const ModalCalendar = () => {
   const closeModal = () => {
     dispatch( doCloseModal() );
     dispatch( doCleanActiveEvent() );
-    setFormValues( initialForm );
 
   };
 
