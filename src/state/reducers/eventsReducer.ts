@@ -35,6 +35,14 @@ export const eventsReducer = ( state: EventsState = initialState, action: Events
         events: [ ...state.events, {...action.payload}]
       }
 
+    case '[events] - Update event':
+      return {
+        ...state,
+        events: state.events.map( event => (
+          event._id === action.payload._id ? action.payload : event
+        ))
+      }
+
     case '[events] - Activate event':
       return {
         ...state,

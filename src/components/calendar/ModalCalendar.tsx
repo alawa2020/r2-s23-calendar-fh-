@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 
 import Modal from "react-modal";
 import DateTimePicker from 'react-datetime-picker';
@@ -11,7 +11,7 @@ import { Event } from "../../interfaces";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../state/reducers";
-import { doAddNewEvent, doCloseModal } from "../../state/actions";
+import { doAddNewEvent, doCleanActiveEvent, doCloseModal, doUpdateEvent } from "../../state/actions";
 
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
@@ -36,11 +36,19 @@ export const ModalCalendar = () => {
   const [isValidTitle, setIsValidTitle] = useState(true);
 
   const { isModalOpen } = useSelector( (state: State) => state.ui );
+  const { activeEvent } = useSelector( (state: State) => state.events );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if( activeEvent ) {
+      setFormValues( activeEvent )
+    }
+  }, [ activeEvent, setFormValues ])
 
   // functions
   const closeModal = () => {
     dispatch( doCloseModal() );
+    dispatch( doCleanActiveEvent() );
     setFormValues( initialForm );
 
   };
@@ -75,7 +83,7 @@ export const ModalCalendar = () => {
       }
       dispatch( doAddNewEvent( eventToAdd ));
     } else {
-      alert('event updated')
+      dispatch( doUpdateEvent( formValues ) );
     }
     setIsValidTitle( true );
     closeModal();
