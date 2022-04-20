@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Event } from '../../interfaces';
 import { EventsActionType } from '../actions';
 
@@ -8,7 +9,19 @@ interface EventsState {
 }
 
 const initialState: EventsState = {
-  events: [],
+  events: [
+    {
+      title: 'Yo puedo!',
+      start: moment().toDate(),
+      end: moment().add(1, 'hours').toDate(),
+      _id: Date.now().toString(),
+      notes: 'no me rendire! por mis amigos!',
+      user: {
+        uid: Date.now().toString(),
+        name: 'Fernando',
+      }
+    }
+  ],
   activeEvent: null,
 }
 

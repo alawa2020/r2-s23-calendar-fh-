@@ -7,34 +7,23 @@ import { AddNewFab, Navbar } from '../ui'
 import { Event } from '../../interfaces';
 import { messages } from '../../utils';
 import { ModalCalendar, CalendarEvent } from './';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doOpenModal } from '../../state/actions';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
+import { State } from '../../state/reducers';
 
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
-const events: Event[] = [
-  {
-    title: 'Yo puedo!',
-    start: moment().toDate(),
-    end: moment().add(1, 'hours').toDate(),
-    _id: Date.now().toString(),
-    notes: 'no me rendire! por mis amigos!',
-    user: {
-      uid: Date.now().toString(),
-      name: 'Fernando',
-    }
-  }
-]
 
 
 export const CalendarScreen = () => {
   // hooks
   const [lastView, setLastView] = useState(localStorage.getItem('lastView-r2') || 'month');
 
+  const { events } = useSelector( (state: State) => state.events );
   const dispatch = useDispatch();
 
   // functions
