@@ -23,6 +23,10 @@ const initialForm: Event = {
   notes: '',
   start: moment().minutes(0).seconds(0).add(1, 'hours').toDate(),
   end: moment().minutes(0).seconds(0).add(2, 'hours').toDate(),
+  user: {
+    uid: '',
+    name: '',
+  }
 }
 
 export const ModalCalendar = () => {
@@ -60,8 +64,8 @@ export const ModalCalendar = () => {
       <Modal
         isOpen={ isModalOpen }
         // onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
+        onRequestClose={ closeModal }
+        style={ customStyles }
         contentLabel="Example Modal"
         className="modal"
         overlayClassName="modal-fondo"

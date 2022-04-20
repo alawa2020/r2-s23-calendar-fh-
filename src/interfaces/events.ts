@@ -4,4 +4,10 @@ export interface Event {
   notes: string;
   start: Date;
   end: Date;
+  user: User;
+}
+
+export interface User {
+  uid: string;
+  name: string;
 }
