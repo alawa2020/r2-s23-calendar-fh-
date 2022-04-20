@@ -9,6 +9,9 @@ import { customStyles } from "../../utils";
 import "./modalCalendar.css";
 import { Event } from "../../interfaces";
 import { useForm } from "../../hooks/useForm";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "../../state/reducers";
+import { doCloseModal } from "../../state/actions";
 
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
@@ -27,8 +30,12 @@ export const ModalCalendar = () => {
   const { formValues, setFormValues, handleInputChange } = useForm( initialForm );
   const { title, notes, start, end } = formValues;
 
+  const { isModalOpen } = useSelector( (state: State) => state.ui );
+  const dispatch = useDispatch();
   // functions
-  const closeModal = () => {};
+  const closeModal = () => {
+    dispatch( doCloseModal() );
+  };
 
   const handleStartDateChange = ( e: Date ) => {
     setFormValues({
@@ -51,7 +58,7 @@ export const ModalCalendar = () => {
   return (
     <>
       <Modal
-        isOpen={true}
+        isOpen={ isModalOpen }
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}

@@ -4,13 +4,15 @@ import React, { useState } from 'react'
 import { Calendar, momentLocalizer, View } from 'react-big-calendar'
 import moment from 'moment'
 
-import { Navbar } from '../ui'
+import { AddNewFab, Navbar } from '../ui'
 import { Event } from '../../interfaces';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
 import { messages } from '../../utils';
 import { ModalCalendar } from './';
+import { useDispatch } from 'react-redux';
+import { doOpenModal } from '../../state/actions';
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
@@ -26,6 +28,8 @@ const events: Event[] = [
 export const CalendarScreen = () => {
   // hooks
   const [lastView, setLastView] = useState(localStorage.getItem('lastView-r2') || 'month');
+
+  const dispatch = useDispatch();
 
   // functions
   const onView = ( e: string ) => {
@@ -50,6 +54,7 @@ export const CalendarScreen = () => {
 
   const onDoubleClickEvent = ( event: Event ) => {
     console.log('doubleClick', event.title);
+    dispatch( doOpenModal() );
   }
 
 
@@ -69,6 +74,8 @@ export const CalendarScreen = () => {
         onDoubleClickEvent={ onDoubleClickEvent }
         messages={ messages }
       />
+
+      <AddNewFab />
 
       <ModalCalendar />
 
