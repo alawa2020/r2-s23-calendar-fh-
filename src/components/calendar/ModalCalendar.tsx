@@ -51,6 +51,7 @@ export const ModalCalendar = () => {
   const closeModal = () => {
     dispatch( doCloseModal() );
     dispatch( doCleanActiveEvent() );
+    setFormValues( initialForm );
 
   };
 
@@ -116,7 +117,6 @@ export const ModalCalendar = () => {
               className="form-control"
               // format="y-MM-dd h:mm:ss a"
               format="dd/MM/y h:mm a"
-              maxDate={ end }
             />
           </div>
 
