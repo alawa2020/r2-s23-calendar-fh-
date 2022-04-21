@@ -1,4 +1,4 @@
-import moment from 'moment';
+
 import { Event } from '../../interfaces';
 import { EventsActionType } from '../actions';
 
@@ -9,19 +9,7 @@ interface EventsState {
 }
 
 const initialState: EventsState = {
-  events: [
-    {
-      title: 'Yo puedo!',
-      start: moment().toDate(),
-      end: moment().add(1, 'hours').toDate(),
-      _id: Date.now().toString(),
-      notes: 'no me rendire! por mis amigos!',
-      user: {
-        uid: (Date.now()+1).toString(),
-        name: 'Fernando',
-      }
-    }
-  ],
+  events: [],
   activeEvent: null,
 }
 
@@ -59,6 +47,12 @@ export const eventsReducer = ( state: EventsState = initialState, action: Events
       return {
         ...state,
         events: state.events.filter( event => event._id !== action.payload.id ),
+      }
+
+    case '[events] - Load events':
+      return {
+        ...state,
+        events: [ ...action.payload ]
       }
 
   

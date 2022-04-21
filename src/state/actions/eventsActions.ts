@@ -1,8 +1,9 @@
 import { Dispatch } from "redux";
 import { Event } from "../../interfaces";
-import { CreateEventResponse } from "../../interfaces/responses";
+import { CreateEventResponse, GetEventsResponse } from "../../interfaces/responses";
 import { fetchWithToken } from '../../utils/fetch';
 import { State } from "../reducers";
+import { transformGetEventsOfDb } from '../../utils/transform-get-events-of-db';
 
 // types
 export type EventsActionType =
@@ -11,6 +12,7 @@ export type EventsActionType =
   |{ type: '[events] - Add new event'; payload: Event }
   |{ type: '[events] - Update event'; payload: Event }
   |{ type: '[events] - Delete event'; payload: { id: string } }
+  |{ type: '[events] - Load events'; payload: Event[] }
 
 
 // synchronous actions
@@ -38,6 +40,11 @@ export const doDeleteEvent = ( id: string ): EventsActionType => ({
   payload: {
     id,
   }
+});
+
+const doLoadEvents = ( events: Event[] ):EventsActionType => ({
+  type: '[events] - Load events',
+  payload: events,
 });
 
 
@@ -70,6 +77,26 @@ export const startAddEvent = ( event: Event ) => {
     } catch (err) {
       console.log(err);
       alert('somethin went wrong!');
+    }
+  }
+}
+
+export const startLoadEvents = () => {
+  return async( dispatch: Dispatch ) => {
+    try {
+
+      const resp = await fetchWithToken( '/events' );
+      const body: GetEventsResponse = await resp.json();
+
+      if( body.ok ) {
+        console.log( body.eventos );
+        dispatch( doLoadEvents( transformGetEventsOfDb( body.eventos )) )
+      } else {
+        alert('no se pudo cargar los eventos')
+      }
+    } catch (err) {
+      console.log(err);
+      alert('something went wrong!');
     }
   }
 }

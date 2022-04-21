@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Calendar, momentLocalizer, SlotInfo, View } from 'react-big-calendar'
 import moment from 'moment'
@@ -8,7 +8,7 @@ import { Event } from '../../interfaces';
 import { messages } from '../../utils';
 import { ModalCalendar, CalendarEvent } from './';
 import { useDispatch, useSelector } from 'react-redux';
-import { doActivateEvent, doCleanActiveEvent, doOpenModal } from '../../state/actions';
+import { doActivateEvent, doCleanActiveEvent, doOpenModal, startLoadEvents } from '../../state/actions';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
@@ -25,6 +25,10 @@ export const CalendarScreen = () => {
 
   const { events, activeEvent } = useSelector( (state: State) => state.events );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch( startLoadEvents() as any)
+  }, [ dispatch ])
 
   // functions
   const onView = ( e: string ) => {
