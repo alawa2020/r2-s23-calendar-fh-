@@ -35,7 +35,7 @@ const doUpdateEvent = ( event: Event ): EventsActionType => ({
   payload: event,
 });
 
-export const doDeleteEvent = ( id: string ): EventsActionType => ({
+const doDeleteEvent = ( id: string ): EventsActionType => ({
   type: '[events] - Delete event',
   payload: {
     id,
@@ -89,7 +89,6 @@ export const startLoadEvents = () => {
       const body: GetEventsResponse = await resp.json();
 
       if( body.ok ) {
-        console.log( body.eventos );
         dispatch( doLoadEvents( transformGetEventsOfDb( body.eventos )) )
       } else {
         alert('no se pudo cargar los eventos')
