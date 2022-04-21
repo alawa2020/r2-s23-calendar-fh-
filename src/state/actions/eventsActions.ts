@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { Event } from "../../interfaces";
-import { CreateEventResponse, GetEventsResponse, UpdateEventResponse } from "../../interfaces/responses";
+import { CreateEventResponse, DeleteEventResponse, GetEventsResponse, UpdateEventResponse } from "../../interfaces/responses";
 import { fetchWithToken } from '../../utils/fetch';
 import { State } from "../reducers";
 import { transformGetEventsOfDb } from '../../utils/transform-get-events-of-db';
@@ -110,6 +110,25 @@ export const startUpdateEvent = ( event: Event ) => {
 
       if( body.ok ) {
         dispatch( doUpdateEvent( event ) );
+      } else {
+        alert( body.msg );
+      }
+    } catch (err) {
+      console.log(err);
+      alert('something went wrong!');
+    }
+  }
+}
+
+export const startDeleteEvent = ( eventId: string ) => {
+  return async( dispatch: Dispatch ) => {
+    try {
+      const resp = await fetchWithToken(`/events/${ eventId }`, {}, 'DELETE' );
+      const body: DeleteEventResponse = await resp.json();
+
+      if( body.ok ) {
+        dispatch( doDeleteEvent( eventId ) );
+        dispatch( doCleanActiveEvent() );
       } else {
         alert( body.msg );
       }

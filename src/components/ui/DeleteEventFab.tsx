@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { doCleanActiveEvent, doDeleteEvent } from "../../state/actions";
+import { startDeleteEvent } from "../../state/actions";
 import { State } from "../../state/reducers";
 
 
@@ -11,8 +11,9 @@ export const DeleteEventFab = () => {
 
   const handleDeleteClick = () => {
     if( activeEvent ) {
-      dispatch( doDeleteEvent( activeEvent._id ));
-      dispatch( doCleanActiveEvent() );
+      if( window.confirm('Are you sure') ) {
+        dispatch( startDeleteEvent( activeEvent._id ) as any);
+      }
     }
   }
   return (
