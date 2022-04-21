@@ -13,9 +13,15 @@ export type EventsActionType =
   |{ type: '[events] - Update event'; payload: Event }
   |{ type: '[events] - Delete event'; payload: { id: string } }
   |{ type: '[events] - Load events'; payload: Event[] }
+  |{ type: '[events] - Clean events state'; }
 
 
 // synchronous actions
+
+export const doCleanEventsState = (): EventsActionType => ({
+  type: '[events] - Clean events state',
+});
+
 export const doActivateEvent = ( event: Event ): EventsActionType => ({
   type: '[events] - Activate event',
   payload: event,

@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { LoginResponse, RegisterUserResponse, RevalidateTokenResponse } from '../../interfaces/responses';
 import { fetchWithoutToken, fetchWithToken } from '../../utils/fetch';
+import { doCleanEventsState } from './eventsActions';
 /* TYPES */
 export type AuthActionType =
   |{ type: '[auth] - Sign in'; payload: { uid: string, name: string, }}
@@ -90,5 +91,6 @@ export const startSignOut = () => {
   return ( dispatch: Dispatch ) => {
     localStorage.removeItem('calendar-token-r2');
     dispatch( doSignOut() );
+    dispatch( doCleanEventsState() );
   }
 }

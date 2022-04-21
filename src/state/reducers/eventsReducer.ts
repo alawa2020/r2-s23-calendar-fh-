@@ -16,6 +16,11 @@ const initialState: EventsState = {
 
 export const eventsReducer = ( state: EventsState = initialState, action: EventsActionType): EventsState => {
   switch ( action.type ) {
+
+    case '[events] - Clean events state':
+      return {
+        ...initialState,
+      }
     
     case '[events] - Activate event':
       return {
