@@ -7,11 +7,11 @@ import { AuthScreen } from '../components/auth'
 import { CalendarScreen } from '../components/calendar'
 import { State } from '../state/reducers';
 import { startCheckAuth } from '../state/actions/authActions';
-
+import { PublicRoute, PrivateRoute } from '.';
 
 export const AppRouter = () => {
   // hooks
-  const { isAuthCheck } = useSelector( (state: State) => state.auth );
+  const { isAuthCheck, user } = useSelector( (state: State) => state.auth );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch( startCheckAuth() as any)
@@ -26,14 +26,16 @@ export const AppRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route 
+        <PublicRoute 
           exact
           path="/auth"
           component={ AuthScreen }
+          isAuth={ !!user }
         />
-        <Route 
+        <PrivateRoute 
           path="/"
           component={ CalendarScreen}
+          isAuth={ !!user }
         />
       </Switch>
     </Router>
