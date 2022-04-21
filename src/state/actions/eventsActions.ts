@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { Event } from "../../interfaces";
-import { CreateEventResponse, GetEventsResponse } from "../../interfaces/responses";
+import { CreateEventResponse, GetEventsResponse, UpdateEventResponse } from "../../interfaces/responses";
 import { fetchWithToken } from '../../utils/fetch';
 import { State } from "../reducers";
 import { transformGetEventsOfDb } from '../../utils/transform-get-events-of-db';
@@ -30,7 +30,7 @@ const doAddNewEvent = ( event: Event ): EventsActionType => ({
   payload: event,
 });
 
-export const doUpdateEvent = ( event: Event ): EventsActionType => ({
+const doUpdateEvent = ( event: Event ): EventsActionType => ({
   type: '[events] - Update event',
   payload: event,
 });
@@ -93,6 +93,25 @@ export const startLoadEvents = () => {
         dispatch( doLoadEvents( transformGetEventsOfDb( body.eventos )) )
       } else {
         alert('no se pudo cargar los eventos')
+      }
+    } catch (err) {
+      console.log(err);
+      alert('something went wrong!');
+    }
+  }
+}
+
+export const startUpdateEvent = ( event: Event ) => {
+  return async( dispatch: Dispatch ) => {
+    const { _id, user, ...eventToUpdate} = { ...event };
+    try {
+      const resp = await fetchWithToken(`/events/${ event._id }`, eventToUpdate, 'PUT' );
+      const body: UpdateEventResponse = await resp.json();
+
+      if( body.ok ) {
+        dispatch( doUpdateEvent( event ) );
+      } else {
+        alert( body.msg );
       }
     } catch (err) {
       console.log(err);
