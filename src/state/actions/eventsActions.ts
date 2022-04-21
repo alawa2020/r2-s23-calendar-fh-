@@ -1,4 +1,8 @@
+import { Dispatch } from "redux";
 import { Event } from "../../interfaces";
+import { CreateEventResponse } from "../../interfaces/responses";
+import { fetchWithToken } from '../../utils/fetch';
+import { State } from "../reducers";
 
 // types
 export type EventsActionType =
@@ -19,7 +23,7 @@ export const doCleanActiveEvent = (): EventsActionType => ({
   type: '[events] - Clean active event',
 });
 
-export const doAddNewEvent = ( event: Event ): EventsActionType => ({
+const doAddNewEvent = ( event: Event ): EventsActionType => ({
   type: '[events] - Add new event',
   payload: event,
 });
@@ -39,3 +43,33 @@ export const doDeleteEvent = ( id: string ): EventsActionType => ({
 
 
 // asynchronous actions
+export const startAddEvent = ( event: Event ) => {
+  return async( dispatch: Dispatch, getState: () => State ) => {
+
+    const { user: userAuth } = getState().auth;
+    const { _id, user, ...eventToUpload } = { ...event };
+
+    try {
+
+      const resp = await fetchWithToken('/events', eventToUpload, 'POST' );
+      const body: CreateEventResponse = await resp.json();
+
+      if( body.ok ) {
+        dispatch( doAddNewEvent({ 
+          ...eventToUpload, 
+          _id: body.evento.id,
+          user: {
+            uid: body.evento.user,
+            name: userAuth?.name!,
+          }
+        }));
+      } else {
+        alert('no se pudo agregar!');
+      }
+
+    } catch (err) {
+      console.log(err);
+      alert('somethin went wrong!');
+    }
+  }
+}

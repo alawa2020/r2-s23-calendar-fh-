@@ -37,7 +37,8 @@ export const startCheckAuth = () => {
         dispatch( doSetAuthCheck() );
       }
     } catch (err) {
-      
+      console.log(err);
+      dispatch( doSetAuthCheck() );
     }
   }
 }

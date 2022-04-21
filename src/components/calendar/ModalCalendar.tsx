@@ -11,7 +11,7 @@ import { Event } from "../../interfaces";
 import { useForm } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../state/reducers";
-import { doAddNewEvent, doCleanActiveEvent, doCloseModal, doUpdateEvent } from "../../state/actions";
+import { doCleanActiveEvent, doCloseModal, doUpdateEvent, startAddEvent } from "../../state/actions";
 
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
@@ -75,15 +75,7 @@ export const ModalCalendar = () => {
       return;
     }
     if( !_id ) {
-      const eventToAdd: Event = {
-        ...formValues,
-        _id: Date.now().toString(),
-        user: {
-          uid: (Date.now()+1).toString(),
-          name: 'Fernando',
-        }
-      }
-      dispatch( doAddNewEvent( eventToAdd ));
+      dispatch( startAddEvent( formValues ) as any);
     } else {
       dispatch( doUpdateEvent( formValues ) );
     }
